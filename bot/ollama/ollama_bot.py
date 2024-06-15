@@ -108,7 +108,8 @@ class OllamaBot(Bot):
             data = {
                 "model": self.ollama_model,
                 "messages": self.format_history_conversation(history,prompt),
-                "stream": False
+                "stream": False,
+                'temperature': conf().get("temperature")
             }
             
             completion_content= requests.post(self.ollama_model_url+"/api/chat", json=data).json().get("message", "").get("content", "")
