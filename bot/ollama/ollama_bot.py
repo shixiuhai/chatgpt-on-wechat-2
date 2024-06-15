@@ -8,7 +8,6 @@ import requests
 
 import openai
 import openai.error
-import broadscope_bailian
 from broadscope_bailian import ChatQaMessage
 
 from bot.bot import Bot
@@ -112,7 +111,7 @@ class OllamaBot(Bot):
                 "stream": False
             }
             
-            completion_content= requests.post(self.ollama_model_url+"/api/chat", json=data).get("message", "").get("content", "")
+            completion_content= requests.post(self.ollama_model_url+"/api/chat", json=data).json().get("message", "").get("content", "")
             
             completion_tokens, total_tokens = self.calc_tokens(session.messages, completion_content)
             return {
