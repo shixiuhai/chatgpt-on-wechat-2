@@ -19,7 +19,7 @@ available_setting = {
     # chatgpt模型， 当use_azure_chatgpt为true时，其名称为Azure上model deployment名称
     "model": "gpt-3.5-turbo",  # 还支持 gpt-4, gpt-4-turbo, wenxin, xunfei, qwen,ollama
     "ollama_model":"", # 当model配置ollama的时候该参数必须配置用于指明要使用哪个开源模型
-    
+    "ollama_model_url":"http://http://172.17.255.227:11434", # 当配置ollama_model的时候该参数也必须被配置
     "use_azure_chatgpt": False,  # 是否使用azure的chatgpt
     "azure_deployment_id": "",  # azure 模型部署名称
     "azure_api_version": "",  # azure api版本
@@ -55,7 +55,7 @@ available_setting = {
     "expires_in_seconds": 3600,  # 无操作会话的过期时间
     # 人格描述
     "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。",
-    "conversation_max_tokens": 1000,  # 支持上下文记忆的最多字符数
+    "conversation_max_tokens": 30000,  # 支持上下文记忆的最多字符数
     # chatgpt限流配置
     "rate_limit_chatgpt": 20,  # chatgpt的调用频率限制
     "rate_limit_dalle": 50,  # openai dalle的调用频率限制

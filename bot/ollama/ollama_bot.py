@@ -4,6 +4,7 @@ import json
 import time
 from typing import List, Tuple
 from config import conf
+import requests
 
 import openai
 import openai.error
@@ -24,34 +25,33 @@ from config import conf, load_config
 class OllamaBot(Bot):
     def __init__(self):
         super().__init__()
-        self.api_key_expired_time = self.set_api_key()
+        # self.api_key_expired_time = self.set_api_key()
         self.sessions = SessionManager(OllamaSession, model=conf().get("model", const.OLLAMA))
         self.ollama_model =conf().get("ollama_model") # 配置了ollama下面的model
-   
-    # def api_key_client(self):
-    #     return broadscope_bailian.AccessTokenClient(access_key_id=self.access_key_id(), access_key_secret=self.access_key_secret())
-
-    # def access_key_id(self):
-    #     return conf().get("qwen_access_key_id")
-
-    # def access_key_secret(self):
-    #     return conf().get("qwen_access_key_secret")
-
-    # def agent_key(self):
-    #     return conf().get("qwen_agent_key")
-
-    # def app_id(self):
-    #     return conf().get("qwen_app_id")
-
-    def node_id(self):
-        return conf().get("qwen_node_id", "")
-
-    def temperature(self):
-        return conf().get("temperature", 0.2 )
-
-    def top_p(self):
-        return conf().get("top_p", 1)
-
+        self.ollama_model_url=conf().get("ollama_model_url") # 配置了ollama下面的基本url
+    def format_history_conversation(self, history_conversation_list:list,prompt:str):
+        """
+        处理一下历史对话
+        """
+        formatted_messages = []
+        for convo in history_conversation_list:
+            if convo.user != "":
+                formatted_messages.append({
+                    "role": "user",
+                    "content": convo.user
+                })
+            if convo.bot != "":
+                formatted_messages.append({
+                    "role": "assistant",
+                    "content":  convo.bot
+                })
+                
+        formatted_messages.append({
+            "role": "user",
+            "content":prompt
+        })
+        return formatted_messages
+    
     def reply(self, query, context=None):
         # acquire reply content
         if context.type == ContextType.TEXT:
@@ -106,10 +106,14 @@ class OllamaBot(Bot):
         """
         try:
             prompt, history = self.convert_messages_format(session.messages)
-            self.update_api_key_if_expired()
-            # NOTE 阿里百炼的call()函数未提供temperature参数，考虑到temperature和top_p参数作用相同，取两者较小的值作为top_p参数传入，详情见文档 https://help.aliyun.com/document_detail/2587502.htm
-            response = broadscope_bailian.Completions().call(app_id=self.app_id(), prompt=prompt, history=history, top_p=min(self.temperature(), self.top_p()))
-            completion_content = self.get_completion_content(response, self.node_id())
+            data = {
+                "model": self.ollama_model,
+                "messages": self.format_history_conversation(history,prompt),
+                "stream": False
+            }
+            
+            completion_content= requests.post(self.ollama_model_url, json=data).get("message", "").get("content", "")
+            
             completion_tokens, total_tokens = self.calc_tokens(session.messages, completion_content)
             return {
                 "total_tokens": total_tokens,
@@ -149,16 +153,19 @@ class OllamaBot(Bot):
             else:
                 return result
 
-    def set_api_key(self):
-        api_key, expired_time = self.api_key_client().create_token(agent_key=self.agent_key())
-        broadscope_bailian.api_key = api_key
-        return expired_time
-
-    def update_api_key_if_expired(self):
-        if time.time() > self.api_key_expired_time:
-            self.api_key_expired_time = self.set_api_key()
 
     def convert_messages_format(self, messages) -> Tuple[str, List[ChatQaMessage]]:
+        """_summary_
+        消息格式化处理
+        Args:
+            messages (_type_): _description_
+
+        Raises:
+            Exception: _description_
+
+        Returns:
+            Tuple[str, List[ChatQaMessage]]: _description_
+        """
         history = []
         user_content = ''
         assistant_content = ''
@@ -184,33 +191,17 @@ class OllamaBot(Bot):
         logger.debug("[QWEN] user content as prompt: {}".format(user_content))
         return user_content, history
 
-    def get_completion_content(self, response, node_id):
-        if not response['Success']:
-            return f"[ERROR]\n{response['Code']}:{response['Message']}"
-        text = response['Data']['Text']
-        if node_id == '':
-            return text
-        # TODO: 当使用流程编排创建大模型应用时，响应结构如下，最终结果在['finalResult'][node_id]['response']['text']中，暂时先这么写
-        # {
-        #     'Success': True,
-        #     'Code': None,
-        #     'Message': None,
-        #     'Data': {
-        #         'ResponseId': '9822f38dbacf4c9b8daf5ca03a2daf15',
-        #         'SessionId': 'session_id',
-        #         'Text': '{"finalResult":{"LLM_T7islK":{"params":{"modelId":"qwen-plus-v1","prompt":"${systemVars.query}${bizVars.Text}"},"response":{"text":"作为一个AI语言模型，我没有年龄，因为我没有生日。\n我只是一个程序，没有生命和身体。"}}}}',
-        #         'Thoughts': [],
-        #         'Debug': {},
-        #         'DocReferences': []
-        #     },
-        #     'RequestId': '8e11d31551ce4c3f83f49e6e0dd998b0',
-        #     'Failed': None
-        # }
-        text_dict = json.loads(text)
-        completion_content =  text_dict['finalResult'][node_id]['response']['text']
-        return completion_content
 
     def calc_tokens(self, messages, completion_content):
+        """_summary_
+        统计使用的tokens
+        Args:
+            messages (_type_): _description_
+            completion_content (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         completion_tokens = len(completion_content)
         prompt_tokens = 0
         for message in messages:
