@@ -2,7 +2,7 @@
 # 我参考作者原来接入qwen的部分代码进行了修改
 # 代码修改流程 参考提交日志，所有修改的地方都有助手
 # 主要核心地方 bridge.py 里面设置调度,bot_factory.py里控制实例化对象
-# 怎么配置ollama代码
+# 怎么配置ollama代码，在config.json里进行配置
 * 1. 配置使用的模型 "model": "ollama", 
 * 2. 配置使用的ollama模型 "ollama_model":"qwen2:7b",
 * 3. 配置自己ollama_model模型的url "ollama_model_url":"http://172.17.255.227:11434", 
