@@ -1,4 +1,4 @@
-# 给chatgpt-on-wechat接入ollama
+# 给chatgpt-on-wechat接入ollama 使用的pyton版本是3.8.10
 # 我参考作者原来接入qwen的部分代码进行了修改
 # 代码修改流程 参考提交日志，所有修改的地方都有注释
 # 主要核心地方 bridge.py 里面设置调度,bot_factory.py里控制实例化对象
