@@ -19,7 +19,7 @@ available_setting = {
     # chatgpt模型， 当use_azure_chatgpt为true时，其名称为Azure上model deployment名称
     "model": "gpt-3.5-turbo",  # 还支持 gpt-4, gpt-4-turbo, wenxin, xunfei, qwen,ollama
     "ollama_model":"", # 当model配置ollama的时候该参数必须配置用于指明要使用哪个开源模型
-    "ollama_model_url":"http://http://172.17.255.227:11434", # 当配置ollama_model的时候该参数也必须被配置
+    "ollama_model_url":"http://172.17.255.227:11434", # 当配置ollama_model的时候该参数也必须被配置
     "use_azure_chatgpt": False,  # 是否使用azure的chatgpt
     "azure_deployment_id": "",  # azure 模型部署名称
     "azure_api_version": "",  # azure api版本

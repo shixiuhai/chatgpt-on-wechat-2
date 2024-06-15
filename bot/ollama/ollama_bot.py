@@ -112,7 +112,7 @@ class OllamaBot(Bot):
                 "stream": False
             }
             
-            completion_content= requests.post(self.ollama_model_url, json=data).get("message", "").get("content", "")
+            completion_content= requests.post(self.ollama_model_url+"/api/chat", json=data).get("message", "").get("content", "")
             
             completion_tokens, total_tokens = self.calc_tokens(session.messages, completion_content)
             return {
