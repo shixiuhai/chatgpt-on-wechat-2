@@ -75,6 +75,9 @@ class GoogleGeminiBot(Bot):
             return res
         for i in range(len(messages) - 1, -1, -1):
             message = messages[i]
+            if message.get("role")=="system":
+                res.insert(0,message)
+            
             if message.get("role") != turn:
                 continue
             res.insert(0, message)
