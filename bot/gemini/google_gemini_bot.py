@@ -48,8 +48,14 @@ class GoogleGeminiBot(Bot):
 
     def _convert_to_gemini_messages(self, messages: list):
         res = []
+        if messages[0].get("role")!="system":
+            messages.insert(0,{
+                "role":"system",
+                "content":conf().get("character_desc")
+            })
+        
         for msg in messages:
-            if msg.get("role") == "user":
+            if msg.get("role") == "user" or msg.get("role")=="system":
                 role = "user"
             elif msg.get("role") == "assistant":
                 role = "model"
