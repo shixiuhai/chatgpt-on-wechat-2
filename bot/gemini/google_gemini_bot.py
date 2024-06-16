@@ -35,7 +35,7 @@ class GoogleGeminiBot(Bot):
             session = self.sessions.session_query(query, session_id)
             gemini_messages = self._convert_to_gemini_messages(self.filter_messages(session.messages))
             genai.configure(api_key=self.api_key)
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.GenerativeModel('gemini-1.5-pro')
             response = model.generate_content(gemini_messages)
             reply_text = response.text
             self.sessions.session_reply(reply_text, session_id)
