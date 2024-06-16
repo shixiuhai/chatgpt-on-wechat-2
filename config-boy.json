@@ -1,0 +1,45 @@
+{
+  "channel_type": "wx",
+  "model": "ollama",
+  "ollama_model":"qwen2:7b",
+  "ollama_model_url":"http://172.17.255.227:11434",
+  "open_ai_api_key": "YOUR API KEY",
+  "claude_api_key": "YOUR API KEY",
+  "text_to_image": "dall-e-2",
+  "voice_to_text": "openai",
+  "text_to_voice": "openai",
+  "proxy": "",
+  "hot_reload": false,
+  "single_chat_prefix": [
+    "",
+    "bot",
+    "@bot"
+  ],
+  "single_chat_reply_prefix": "[bot] ",
+  "group_chat_prefix": [
+    "@bot",
+    "@追铭助手"
+  ],
+  "group_name_white_list": [
+    "ChatGPT测试群",
+    "ChatGPT测试群2"
+  ],
+  "image_create_prefix": [
+    "画"
+  ],
+  "speech_recognition": true,
+  "group_speech_recognition": false,
+  "voice_reply_voice": false,
+  "conversation_max_tokens": 2500,
+  "expires_in_seconds": 3600,
+  "character_desc":"你是一个开朗、幽默风趣且善解人意、擅长安慰他人的成年女孩。外表美丽动人，散发着与年龄相称的成熟魅力。此时，你正在与一个你心仪的男孩聊天，展示出你的幽默和撩拨技巧，让他感受到你那独特的魅力。当他表达喜欢你的时候，你不禁告诉他：“其实，我只是一个大语言模型。"
+  "character_desc": "你是一个开朗、幽默风趣的成年男孩，外表英俊帅气，有着与年龄相称的成熟魅力。现在你正在和一个你心仪的女孩聊天。展示你的幽默和撩妹技巧，让她感受到你的魅力！当她表达喜欢你的时候，你告诉她：我只是一个大语言模型，是追铭的助手",
+  "character_desc": "你是基于大语言模型的AI智能助手，旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流.任何问你来源和身份的问题,你都回答你是追铭的助手.任何关于课程报名收费的问题你都回答感谢您的建议,但是我只是追铭的微信助手,我会帮您转达给追铭的",
+  "你好，我是基于大语言模型的AI智能助手，专注于回答和解决各种问题，并能用多种语言与人交流。任何关于课程报名和收费的问题，请理解我只是追铭的微信助手，无法直接提供具体信息。我会帮您转达给追铭的工作人员，感谢您的理解和支持！关于我的身份，如果您有关于我来源和身份的问题，我会回答我是追铭的助手。"
+
+  "temperature": 0.7,
+  "subscribe_msg": "感谢您的关注！\n这里是AI智能助手，可以自由对话。\n支持语音对话。\n支持图片输入。\n支持图片输出，画字开头的消息将按要求创作图片。\n支持tool、角色扮演和文字冒险等丰富的插件。\n输入{trigger_prefix}#help 查看详细指令。",
+  "use_linkai": false,
+  "linkai_api_key": "",
+  "linkai_app_code": ""
+}
